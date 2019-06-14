@@ -42,21 +42,24 @@ export default class EditBookmarkForm extends Component {
 				this.setState({ error: error });
 			});
 	}
-
-	handleSubmit = e => {
-		console.log('handlesumbit');
-		if (e) e.preventDefault();
+	handleChange = e => {
 		const newTitle = this.refs.title.value;
 		const newUrl = this.refs.url.value;
 		const newDescription = this.refs.description.value;
 		const newRating = this.refs.rating.value;
-		console.log(newTitle);
+
 		this.setState({
 			title: newTitle,
 			url: newUrl,
 			description: newDescription,
 			rating: newRating
 		});
+		console.log(this.state);
+	};
+	handleSubmit = e => {
+		console.log('handlesumbit');
+		if (e) e.preventDefault();
+
 		console.log(this.state);
 
 		fetch(
@@ -70,7 +73,9 @@ export default class EditBookmarkForm extends Component {
 				},
 				body: JSON.stringify(this.state)
 			}
-		);
+		).then(resData => {
+			this.context.updateBookmark(resData);
+		});
 	};
 	render() {
 		const { title, url, description, rating } = this.state;
@@ -87,6 +92,7 @@ export default class EditBookmarkForm extends Component {
 							className='editBookmarkInput'
 							id='editTitle'
 							defaultValue={title}
+							onChange={this.handleChange}
 						/>
 					</label>
 					<label htmlFor='url'>
@@ -98,6 +104,7 @@ export default class EditBookmarkForm extends Component {
 							className='editBookmarkInput'
 							id='editUrl'
 							defaultValue={url}
+							onChange={this.handleChange}
 						/>
 					</label>
 					<label htmlFor='description'>
@@ -109,6 +116,7 @@ export default class EditBookmarkForm extends Component {
 							className='editBookmarkInput'
 							id='editDescription'
 							defaultValue={description}
+							onChange={this.handleChange}
 						/>
 					</label>
 					<label htmlFor='rating'>
@@ -120,6 +128,7 @@ export default class EditBookmarkForm extends Component {
 							className='editBookmarkInput'
 							id='editRating'
 							defaultValue={rating}
+							onChange={this.handleChange}
 						/>
 					</label>
 
