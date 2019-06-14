@@ -37,12 +37,11 @@ class App extends Component {
 	};
 
 	updateBookmark = bookmark => {
-		console.log('updated bookmark');
-		const i = bookmark.id;
-		const currentBookmarks = this.state.bookmarks;
-
+		const newBookmarks = this.state.bookmarks.map(bm =>
+			bm.id === bookmark.id ? bookmark : bm
+		);
 		this.setState({
-			bookmarks: (currentBookmarks[i] = bookmark)
+			bookmarks: newBookmarks
 		});
 	};
 

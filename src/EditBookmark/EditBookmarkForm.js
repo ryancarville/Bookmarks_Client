@@ -60,25 +60,25 @@ export default class EditBookmarkForm extends Component {
 		});
 		console.log(this.state);
 	};
-	handleSubmit = (cb, e) => {
+	handleSubmit = e => {
 		console.log('handlesumbit');
 		if (e) e.preventDefault();
+		const bookmarkId = this.props.match.params.bookmarkId;
 		const newBM = this.state;
 		console.log(this.state);
-		fetch(
-			`http://localhost:8000/api/bookmarks/${
-				this.props.match.params.bookmarkId
-			}`,
-			{
-				method: 'PATCH',
-				headers: {
-					authorization: `bearer ${config.API_KEY}`
-				},
-				body: JSON.stringify(newBM)
-			}
-		).then(data => {
-			cb(data);
-		});
+		fetch(`http://localhost:8000/api/bookmarks/${bookmarkId}`, {
+			method: 'PATCH',
+			headers: {
+				authorization: `bearer ${config.API_KEY}`
+			},
+			body: JSON.stringify(newBM)
+		})
+			.then(data => {
+				this.context.updateBookmark(data);
+			})
+			.catch(error => {
+				console.error(error);
+			});
 	};
 	render() {
 		const { title, url, description, rating } = this.state;
