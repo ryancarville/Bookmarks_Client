@@ -40,8 +40,8 @@ class App extends Component {
 		console.log('updated bookmark');
 		const i = bookmark.id;
 		const currentBookmarks = this.state.bookmarks;
-		const bookmarkToUpdate = currentBookmarks.filter(bm => bm.id === i);
-
+		let bookmarkToUpdate = currentBookmarks.filter(bm => bm.id === i);
+		bookmarkToUpdate = bookmark;
 		this.setState({
 			bookmarks: bookmarkToUpdate
 		});
