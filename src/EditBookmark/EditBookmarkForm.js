@@ -7,6 +7,7 @@ export default class EditBookmarkForm extends Component {
 		super(props);
 		this.textInput = React.createRef();
 		this.state = {
+			id: null,
 			title: '',
 			url: '',
 			description: '',
@@ -33,7 +34,9 @@ export default class EditBookmarkForm extends Component {
 				return res.json();
 			})
 			.then(data => {
+				console.log(data);
 				this.setState({
+					id: data.id,
 					title: data.title,
 					url: data.url,
 					description: data.description,
@@ -60,7 +63,7 @@ export default class EditBookmarkForm extends Component {
 		});
 		console.log(this.state);
 	};
-	handleSubmit = e => {
+	handleSubmit = (cb, e) => {
 		console.log('handlesumbit');
 		if (e) e.preventDefault();
 		const bookmarkId = this.props.match.params.bookmarkId;
@@ -74,7 +77,7 @@ export default class EditBookmarkForm extends Component {
 			body: JSON.stringify(newBM)
 		})
 			.then(data => {
-				this.context.updateBookmark(data);
+				cb(data);
 			})
 			.catch(error => {
 				console.error(error);
@@ -137,7 +140,11 @@ export default class EditBookmarkForm extends Component {
 								/>
 							</label>
 
-							<button type='submit' onSubmit={this.handleSubmit}>
+							<button
+								type='submit'
+								onSubmit={() => {
+									this.handleSubmit(context.updateBookmark);
+								}}>
 								Submit
 							</button>
 						</form>

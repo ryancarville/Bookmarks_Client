@@ -37,6 +37,7 @@ class App extends Component {
 	};
 
 	updateBookmark = bookmark => {
+		console.log('updateBookmark ran');
 		const newBookmarks = this.state.bookmarks.map(bm =>
 			bm.id === bookmark.id ? bookmark : bm
 		);
