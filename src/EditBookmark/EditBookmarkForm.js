@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import BookmarksContext from '../BookmarksContext';
 import config from '../config';
 
 export default class EditBookmarkForm extends Component {
@@ -56,10 +57,9 @@ export default class EditBookmarkForm extends Component {
 		});
 		console.log(this.state);
 	};
-	handleSubmit = e => {
+	handleSubmit = (cb, e) => {
 		console.log('handlesumbit');
 		if (e) e.preventDefault();
-
 		console.log(this.state);
 
 		fetch(
@@ -73,70 +73,76 @@ export default class EditBookmarkForm extends Component {
 				},
 				body: JSON.stringify(this.state)
 			}
-		).then(resData => {
-			this.context.updateBookmark(resData);
+		).then(data => {
+			cb(this.state);
 		});
 	};
 	render() {
 		const { title, url, description, rating } = this.state;
 		return (
-			<section className='EditBookmarkForm'>
-				<h2>Edit Bookmark</h2>
-				<form>
-					<label htmlFor='title'>
-						Title:
-						<input
-							type='text'
-							name='title'
-							ref='title'
-							className='editBookmarkInput'
-							id='editTitle'
-							defaultValue={title}
-							onChange={this.handleChange}
-						/>
-					</label>
-					<label htmlFor='url'>
-						URL:
-						<input
-							type='text'
-							name='url'
-							ref='url'
-							className='editBookmarkInput'
-							id='editUrl'
-							defaultValue={url}
-							onChange={this.handleChange}
-						/>
-					</label>
-					<label htmlFor='description'>
-						Description:
-						<input
-							type='text'
-							name='description'
-							ref='description'
-							className='editBookmarkInput'
-							id='editDescription'
-							defaultValue={description}
-							onChange={this.handleChange}
-						/>
-					</label>
-					<label htmlFor='rating'>
-						Rating:
-						<input
-							type='number'
-							name='rating'
-							ref='rating'
-							className='editBookmarkInput'
-							id='editRating'
-							defaultValue={rating}
-							onChange={this.handleChange}
-						/>
-					</label>
+			<BookmarksContext.Consumer>
+				{context => (
+					<section className='EditBookmarkForm'>
+						<h2>Edit Bookmark</h2>
+						<form>
+							<label htmlFor='title'>
+								Title:
+								<input
+									type='text'
+									name='title'
+									ref='title'
+									className='editBookmarkInput'
+									id='editTitle'
+									defaultValue={title}
+									onChange={this.handleChange}
+								/>
+							</label>
+							<label htmlFor='url'>
+								URL:
+								<input
+									type='text'
+									name='url'
+									ref='url'
+									className='editBookmarkInput'
+									id='editUrl'
+									defaultValue={url}
+									onChange={this.handleChange}
+								/>
+							</label>
+							<label htmlFor='description'>
+								Description:
+								<input
+									type='text'
+									name='description'
+									ref='description'
+									className='editBookmarkInput'
+									id='editDescription'
+									defaultValue={description}
+									onChange={this.handleChange}
+								/>
+							</label>
+							<label htmlFor='rating'>
+								Rating:
+								<input
+									type='number'
+									name='rating'
+									ref='rating'
+									className='editBookmarkInput'
+									id='editRating'
+									defaultValue={rating}
+									onChange={this.handleChange}
+								/>
+							</label>
 
-					<button type='submit' onClick={this.handleSubmit}>
-						Submit
-					</button>
-				</form>
-			</section>
+							<button
+								type='submit'
+								onClick={this.handleSubmit(context.updateBookmark)}>
+								Submit
+							</button>
+						</form>
+					</section>
+				)}
+			</BookmarksContext.Consumer>
 		);
 	}
 }
