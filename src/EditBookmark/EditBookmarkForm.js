@@ -12,6 +12,7 @@ export default class EditBookmarkForm extends Component {
 			rating: null,
 			error: null
 		};
+		this.handleChange = this.handleChange.bind();
 		this.handleSubmit = this.handleSubmit.bind();
 	}
 	componentDidMount() {
@@ -43,11 +44,12 @@ export default class EditBookmarkForm extends Component {
 				this.setState({ error: error });
 			});
 	}
-	handleChange = e => {
-		const newTitle = this.refs.title.value;
-		const newUrl = this.refs.url.value;
-		const newDescription = this.refs.description.value;
-		const newRating = this.refs.rating.value;
+
+	handleChange = () => {
+		const newTitle = this.textInput.current.focusTextInput();
+		const newUrl = this.textInput.current.focusTextInput();
+		const newDescription = this.textInput.current.focusTextInput();
+		const newRating = this.textInput.current.focusTextInput();
 
 		this.setState({
 			title: newTitle,
@@ -61,7 +63,6 @@ export default class EditBookmarkForm extends Component {
 		console.log('handlesumbit');
 		if (e) e.preventDefault();
 		console.log(this.state);
-
 		fetch(
 			`http://localhost:8000/api/bookmarks/${
 				this.props.match.params.bookmarkId
@@ -74,7 +75,7 @@ export default class EditBookmarkForm extends Component {
 				body: JSON.stringify(this.state)
 			}
 		).then(data => {
-			cb(this.state);
+			cb(data);
 		});
 	};
 	render() {
@@ -90,7 +91,7 @@ export default class EditBookmarkForm extends Component {
 								<input
 									type='text'
 									name='title'
-									ref='title'
+									ref={this.textInput}
 									className='editBookmarkInput'
 									id='editTitle'
 									defaultValue={title}
@@ -102,7 +103,7 @@ export default class EditBookmarkForm extends Component {
 								<input
 									type='text'
 									name='url'
-									ref='url'
+									ref={this.textInput}
 									className='editBookmarkInput'
 									id='editUrl'
 									defaultValue={url}
@@ -114,7 +115,7 @@ export default class EditBookmarkForm extends Component {
 								<input
 									type='text'
 									name='description'
-									ref='description'
+									ref={this.textInput}
 									className='editBookmarkInput'
 									id='editDescription'
 									defaultValue={description}
@@ -126,7 +127,7 @@ export default class EditBookmarkForm extends Component {
 								<input
 									type='number'
 									name='rating'
-									ref='rating'
+									ref={this.textInput}
 									className='editBookmarkInput'
 									id='editRating'
 									defaultValue={rating}
@@ -136,7 +137,7 @@ export default class EditBookmarkForm extends Component {
 
 							<button
 								type='submit'
-								onClick={this.handleSubmit(context.updateBookmark)}>
+								onclick={this.handleSubmit(context.updateBookmark)}>
 								Submit
 							</button>
 						</form>
